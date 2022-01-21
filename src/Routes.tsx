@@ -21,30 +21,26 @@ type CustomRouteProps = {
 
 export default function Routes() {
     const { isAuthenticated, isCheckingAuthentication } = useContext(AuthContext);
-    const history = useHistory()
+    // const history = useHistory()
 
-    function userLoggedOnSGA() {
-        const isUserCredentialsOnUrl = history.location.search
-        return isUserCredentialsOnUrl 
-    }
+    // function userLoggedOnSGA() {
+    //     const isUserCredentialsOnUrl = history.location.search
+    //     return isUserCredentialsOnUrl 
+    // }
 
-    async function refreshLoginOnIdentity(credentialsEncoded: string) {
-        const passwordAndMatricula = credentialsEncoded.replace('?', '').split('---')
-        const password = atob(passwordAndMatricula[0])
-        const matricula = atob(passwordAndMatricula[1])
+    // async function refreshLoginOnIdentity(credentialsEncoded: string) {
+    //     const passwordAndMatricula = credentialsEncoded.replace('?', '').split('---')
+    //     const password = atob(passwordAndMatricula[0])
+    //     const matricula = atob(passwordAndMatricula[1])
 
-        var loginResult = await validateToken({ password, matricula })
+    //     var loginResult = await validateToken({ password, matricula })
         
-        console.log(loginResult)
+    //     loginResult.statusCode === 200 ? 
          
-    }
+    // }
 
     const CustomRoute = ({ isPrivate, ...rest }: CustomRouteProps) => {
         if (isPrivate && !isAuthenticated) {
-            if (userLoggedOnSGA()) {
-                const userCredentials = history.location.search
-                refreshLoginOnIdentity(userCredentials)
-            }
             return <p>aifhj</p>
         } else {
         return <Route {...rest} />;

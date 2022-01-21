@@ -1,4 +1,3 @@
-import { request } from "http";
 import { SignInCredentials } from "../../types/authTypes";
 import { HttpClient } from '../http/httpClient';
 

@@ -1,5 +1,3 @@
-import axios from "axios";
-import qs from "qs";
 import { HttpClient } from "../http/httpClient";
 
 type props = {
@@ -17,7 +15,7 @@ export async function validateToken({matricula, password}: props){
             grant_type: "password",
             username: matricula,
             password,
-            scope: "openid profile offline_access procedimento_api corporativo_api protocolo_api servicoproced_api",
+            scope: "openid profile sga_api offline_access procedimento_api corporativo_api protocolo_api servicoproced_api",
             client_Id: "CARTORIO",
             client_Secret: "OMFCAFSX"
         }

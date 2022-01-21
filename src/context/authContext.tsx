@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 import { login, validateToken } from "../services/userSession";
 import { AuthContextData,  SignInCredentials } from "../types/authTypes";
@@ -6,26 +7,40 @@ import { AuthContextData,  SignInCredentials } from "../types/authTypes";
 export const AuthContext = createContext({} as AuthContextData);
 
 export default function AuthProvider({ children }: any) {
- 
+  const history = useHistory()
   const [isCheckingAuthentication, setIsCheckingAuthentication] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [bearer, setBearer] = useState('')
+  
+  function userLoggedOnSGA() {
+        const isUserCredentialsOnUrl = history.location.search
+        return isUserCredentialsOnUrl 
+    }
 
-  useEffect(() => {
-    validateToken({matricula: '00229', password: '65'})
-      .then((validationResult) => {
-        if (validationResult.statusCode === 200) {
-          setIsAuthenticated(true);
-        }
-        setIsCheckingAuthentication(false);
+  async function refreshLoginOnIdentity(credentialsEncoded: string) {
+        const passwordAndMatricula = credentialsEncoded.replace('?', '').split('---')
+        const password = atob(passwordAndMatricula[0])
+        const matricula = atob(passwordAndMatricula[1])
+
+    await validateToken({ password, matricula })
+      .then(result => {
+        if (result.statusCode === 200) {
+          setIsAuthenticated(true)
+          setBearer(result.body.access_token)
+      }
       })
-      .catch((i) => {
-        setIsAuthenticated(false);
-      });
+    .finally(() => setIsCheckingAuthentication(false))
+    }
+  useEffect(() => {
+    if (userLoggedOnSGA()) {
+        const userCredentials = history.location.search
+        refreshLoginOnIdentity(userCredentials)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function signIn({ matricula, password }: SignInCredentials) {
     const result = await login({ matricula, password });
-
     if (result.body.authorized === true) {
       const {
         accessToken,
@@ -50,6 +65,7 @@ export default function AuthProvider({ children }: any) {
         signIn,
         isCheckingAuthentication,
         signOut,
+        bearer
       }}
     >
       {children}

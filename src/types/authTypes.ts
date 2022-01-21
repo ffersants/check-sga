@@ -1,4 +1,3 @@
-import { NumericLiteral } from "typescript";
 import { HttpResponse } from "../services/http/IHttpClient";
 
 export type SignInCredentials = {
@@ -9,6 +8,7 @@ export type SignInCredentials = {
 export type AuthContextData = {
   signIn(credentials: SignInCredentials): Promise<HttpResponse>;
   signOut(): void;
+  bearer: string;
   isAuthenticated: boolean;
   isCheckingAuthentication: boolean;
 };

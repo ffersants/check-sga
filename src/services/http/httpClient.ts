@@ -1,3 +1,5 @@
+import { AuthContext } from './../../context/authContext';
+import { useContext } from 'react';
 import axios, { AxiosResponse } from "axios";
 import qs from "qs";
 import { HttpRequest, HttpResponse, IHttpClient } from "./IHttpClient";
@@ -5,17 +7,12 @@ import { HttpRequest, HttpResponse, IHttpClient } from "./IHttpClient";
 export class HttpClient implements IHttpClient {
    async request(data: HttpRequest): Promise<HttpResponse> {
     let axiosResponse: AxiosResponse;
-   
     try {
       axiosResponse = await axios.request({
         url: data.url,
         method: data.method,
         data: qs.stringify(data.body),
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "Host": "accountshomol.pcdf.gov.br"
-        },
-        
+        headers: data.headers,
         params: data.params,
         timeoutErrorMessage: "Isso está tomando mais tempo do que o esperado",
       });
@@ -26,9 +23,7 @@ export class HttpClient implements IHttpClient {
       };
     } catch (erro: any) {
       if (erro.response) {
-        console.log(erro)
         if (erro.response.status === 400) {
-          console.log(erro);
           return {
             statusCode: erro.status,
             body: {
@@ -38,7 +33,6 @@ export class HttpClient implements IHttpClient {
           };
         }
         if (erro.response.status === 500) {
-          console.log(erro);
           return {
             statusCode: erro.status,
             body: {

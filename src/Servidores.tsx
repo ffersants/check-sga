@@ -1,33 +1,30 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Table,  Container, Header, Content, Navbar, Icon, Breadcrumb, IconButton } from "rsuite";
+import { AuthContext } from "./context/authContext";
+import { getServidores } from "./services/getServidores/getServidores";
 const { Column, HeaderCell, Cell } = Table;
-
-type props = {
-  codUnidade: number
-}
 
 export default function Servidores() {
     const { codUnidade } = useParams < { codUnidade: string }>()
+    const {bearer} = useContext(AuthContext)
     const [servidores, setServidores] = useState()
     const [isLoading, setIsLoading] = useState(true)
 
 
   useEffect(() => {
-        fetch(`https://localhost:5001/servidores-da-unidade/${codUnidade}`)
-            .then(i => i.json())
+        getServidores({codUnidade, bearer})
           .then(i => {
-              console.log(i)
-            i.forEach((servidor: any) =>
+            i.body.forEach((servidor: any) =>
               servidor.nome = servidor.nome
                                 .replace('<b>', '')
                                 .replace('</b>', '')
             )
-              console.log(i)
-              setServidores(i.sort((a: { nome: string; },b: { nome: any; }) => a.nome.localeCompare(b.nome)))
-            })
+              setServidores(i.body.sort((a: { nome: string; },b: { nome: any; }) => a.nome.localeCompare(b.nome)))
+          })
+          .catch(e => console.log('buscar de servidores falhou', e))
             .finally(() => setIsLoading(false)) 
-    }, [codUnidade])
+    }, [codUnidade, bearer])
 
     return (
       <Container >
