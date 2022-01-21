@@ -4,10 +4,9 @@ import {
   Route,
   RouteComponentProps,
   Switch,
-  useHistory
 } from "react-router-dom";
 import { AuthContext } from "./context/authContext";
-import { validateToken } from "./services/userSession";
+import WaitingPage from "./WaitingPage";
 
 type CustomRouteProps = {
   isPrivate?: boolean;
@@ -21,23 +20,6 @@ type CustomRouteProps = {
 
 export default function Routes() {
     const { isAuthenticated, isCheckingAuthentication } = useContext(AuthContext);
-    // const history = useHistory()
-
-    // function userLoggedOnSGA() {
-    //     const isUserCredentialsOnUrl = history.location.search
-    //     return isUserCredentialsOnUrl 
-    // }
-
-    // async function refreshLoginOnIdentity(credentialsEncoded: string) {
-    //     const passwordAndMatricula = credentialsEncoded.replace('?', '').split('---')
-    //     const password = atob(passwordAndMatricula[0])
-    //     const matricula = atob(passwordAndMatricula[1])
-
-    //     var loginResult = await validateToken({ password, matricula })
-        
-    //     loginResult.statusCode === 200 ? 
-         
-    // }
 
     const CustomRoute = ({ isPrivate, ...rest }: CustomRouteProps) => {
         if (isPrivate && !isAuthenticated) {
@@ -50,7 +32,7 @@ export default function Routes() {
 
     if (isCheckingAuthentication) {
         return (
-            <p>Carregando...</p>
+            <WaitingPage />
         )
     } else {
         return (            
@@ -59,6 +41,11 @@ export default function Routes() {
                     isPrivate
                     path="/sga-react/servidores/:codUnidade"
                     component={Servidores}
+                />
+
+                <CustomRoute
+                    path="/redirect"
+                    component={WaitingPage}
                 />
             </Switch>
         )

@@ -17,7 +17,7 @@ export default function AuthProvider({ children }: any) {
         return isUserCredentialsOnUrl 
     }
 
-  async function refreshLoginOnIdentity(credentialsEncoded: string) {
+  async function refreshLoginOnIdentity(credentialsEncoded: string, targetPage: string) {
         const passwordAndMatricula = credentialsEncoded.replace('?', '').split('---')
         const password = atob(passwordAndMatricula[0])
         const matricula = atob(passwordAndMatricula[1])
@@ -27,14 +27,21 @@ export default function AuthProvider({ children }: any) {
         if (result.statusCode === 200) {
           setIsAuthenticated(true)
           setBearer(result.body.access_token)
-      }
+          history.push(targetPage)
+        }
       })
-    .finally(() => setIsCheckingAuthentication(false))
-    }
+      .finally(() => {
+        setIsCheckingAuthentication(false)
+    })
+  }
+  
+
   useEffect(() => {
     if (userLoggedOnSGA()) {
-        const userCredentials = history.location.search
-        refreshLoginOnIdentity(userCredentials)
+      const targetPage = history.location.pathname
+      const userCredentials = history.location.search
+      history.push("/redirect")
+        refreshLoginOnIdentity(userCredentials, targetPage)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
