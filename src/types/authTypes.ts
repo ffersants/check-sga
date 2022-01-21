@@ -6,9 +6,9 @@ export type SignInCredentials = {
 };
 
 export type AuthContextData = {
-  signIn(credentials: SignInCredentials): Promise<HttpResponse>;
-  signOut(): void;
   bearer: string;
   isAuthenticated: boolean;
   isCheckingAuthentication: boolean;
+  setIsCheckingAuthentication: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
 };

@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import { login, validateToken } from "../services/userSession";
-import { AuthContextData,  SignInCredentials } from "../types/authTypes";
+import { AuthContextData } from "../types/authTypes";
 
 export const AuthContext = createContext({} as AuthContextData);
 
@@ -15,7 +15,7 @@ export default function AuthProvider({ children }: any) {
   function userLoggedOnSGA() {
         const isUserCredentialsOnUrl = history.location.search
         return isUserCredentialsOnUrl 
-    }
+  }
 
   async function refreshLoginOnIdentity(credentialsEncoded: string, targetPage: string) {
         const passwordAndMatricula = credentialsEncoded.replace('?', '').split('---')
@@ -35,12 +35,11 @@ export default function AuthProvider({ children }: any) {
     })
   }
   
-
   useEffect(() => {
     const targetPage = history.location.pathname
     if (userLoggedOnSGA()) {
       const userCredentials = history.location.search
-      history.push("/redirect")
+      // history.push("/redirect")
       refreshLoginOnIdentity(userCredentials, targetPage)
     }
     else {
@@ -50,33 +49,14 @@ export default function AuthProvider({ children }: any) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function signIn({ matricula, password }: SignInCredentials) {
-    const result = await login({ matricula, password });
-    if (result.body.authorized === true) {
-      const {
-        accessToken,
-      } = result.body;
-      
-      setIsAuthenticated(true);
-      localStorage.setItem("jwt", accessToken);
-    }
-
-    return result;
-  }
-
-  function signOut() {
-    localStorage.clear();
-    setIsAuthenticated(false);
-  }
-
   return (
     <AuthContext.Provider
       value={{
+        setIsCheckingAuthentication,
         isAuthenticated,
-        signIn,
         isCheckingAuthentication,
-        signOut,
-        bearer
+        bearer,
+        setIsAuthenticated
       }}
     >
       {children}
