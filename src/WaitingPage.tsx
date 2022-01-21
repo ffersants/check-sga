@@ -1,6 +1,4 @@
-import Lottie from "react-lottie";
-import { Link } from "react-router-dom";
-import { Button, Container, FlexboxGrid, Footer, Loader } from "rsuite";
+import { Footer, Loader } from "rsuite";
 import mainTanceAnimation from './assets/maintance-animation.json'
 import "./LoginStyle.scss";
 import img from './assets/brasao-original.png'

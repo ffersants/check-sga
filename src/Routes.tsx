@@ -1,6 +1,7 @@
 import React, { useContext} from "react";
 import Servidores from "./Servidores";
 import {
+    Redirect,
   Route,
   RouteComponentProps,
   Switch,
@@ -23,7 +24,7 @@ export default function Routes() {
 
     const CustomRoute = ({ isPrivate, ...rest }: CustomRouteProps) => {
         if (isPrivate && !isAuthenticated) {
-            return <p>aifhj</p>
+            return <Redirect to="/google.com" />
         } else {
         return <Route {...rest} />;
         }
@@ -39,12 +40,14 @@ export default function Routes() {
             <Switch>
                 <CustomRoute
                     isPrivate
+                    exact
                     path="/sga-react/servidores/:codUnidade"
                     component={Servidores}
                 />
 
                 <CustomRoute
-                    path="/redirect"
+                    exact
+                    path="/fasf"
                     component={WaitingPage}
                 />
             </Switch>
