@@ -7,8 +7,6 @@ type props = {
   codUnidade: number
 }
 
-
-
 export default function Servidores() {
     const { codUnidade } = useParams < { codUnidade: string }>()
     const [servidores, setServidores] = useState()
