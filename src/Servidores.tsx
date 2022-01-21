@@ -13,17 +13,17 @@ export default function Servidores() {
 
 
   useEffect(() => {
-        getServidores({codUnidade, bearer})
-          .then(i => {
-            i.body.forEach((servidor: any) =>
-              servidor.nome = servidor.nome
-                                .replace('<b>', '')
-                                .replace('</b>', '')
-            )
-              setServidores(i.body.sort((a: { nome: string; },b: { nome: any; }) => a.nome.localeCompare(b.nome)))
-          })
-          .catch(e => console.log('buscar de servidores falhou', e))
-            .finally(() => setIsLoading(false)) 
+    getServidores({codUnidade, bearer})
+      .then(i => {
+        i.body.forEach((servidor: any) =>
+          servidor.nome = servidor.nome
+                            .replace('<b>', '')
+                            .replace('</b>', '')
+        )
+          setServidores(i.body.sort((a: { nome: string; },b: { nome: any; }) => a.nome.localeCompare(b.nome)))
+      })
+      .catch(e => console.log('buscar de servidores falhou', e))
+      .finally(() => setIsLoading(false)) 
     }, [codUnidade, bearer])
 
     return (
@@ -181,17 +181,27 @@ export default function Servidores() {
 
         <Content>
             <Table
-              data={servidores}
-              virtualized
-              height={window.innerHeight}
-              width={window.innerWidth}
-              loading={isLoading}
-              loadAnimation={true}
-              affixHeader
-              hover
-              style={{
-                padding: "0 85px",
-              }}            >
+            data={servidores}
+            virtualized
+            height={window.innerHeight}
+            width={window.innerWidth}
+            loading={isLoading}
+            loadAnimation={true}
+            affixHeader
+            hover
+            style={{
+              padding: "0 85px",
+            }}
+            renderEmpty={() =>
+              <div
+                style={{
+                  textAlign: 'center',
+                  marginTop: '15%'
+                }}
+              >
+                <h6>Nenhum servidor encontrado para a unidade informada</h6>
+            </div>}
+          >
               
               <Column verticalAlign="middle" align="center" fixed>
                 <HeaderCell></HeaderCell>

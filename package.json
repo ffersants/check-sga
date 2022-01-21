@@ -4,6 +4,8 @@
   "homepage": "http://localhost/",
   "private": true,
   "dependencies": {
+    "@axa-fr/react-oidc-context": "^3.1.7",
+    "@axa-fr/react-oidc-context-fetch": "^3.1.7",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
@@ -23,7 +25,9 @@
     "axios": "^0.21.4",
     "less": "^4.1.1",
     "less-loader": "^7.3.0",
-    "node-sass": "^5.0.0"
+    "node-sass": "^5.0.0",
+    "oidc-client": "^1.11.5",
+    "oidc-client-ts": "^2.0.0-beta.3"
   },
   "scripts": {
     "start": "react-scripts start",

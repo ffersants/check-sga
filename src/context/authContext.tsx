@@ -27,21 +27,25 @@ export default function AuthProvider({ children }: any) {
         if (result.statusCode === 200) {
           setIsAuthenticated(true)
           setBearer(result.body.access_token)
-          history.push(targetPage)
         }
       })
       .finally(() => {
         setIsCheckingAuthentication(false)
+        history.push(targetPage)
     })
   }
   
 
   useEffect(() => {
+    const targetPage = history.location.pathname
     if (userLoggedOnSGA()) {
-      const targetPage = history.location.pathname
       const userCredentials = history.location.search
       history.push("/redirect")
-        refreshLoginOnIdentity(userCredentials, targetPage)
+      refreshLoginOnIdentity(userCredentials, targetPage)
+    }
+    else {
+      history.push(targetPage)
+      setIsCheckingAuthentication(false)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

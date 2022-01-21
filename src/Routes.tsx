@@ -1,13 +1,15 @@
 import React, { useContext} from "react";
 import Servidores from "./Servidores";
 import {
-    Redirect,
+    BrowserRouter,
   Route,
   RouteComponentProps,
   Switch,
 } from "react-router-dom";
 import { AuthContext } from "./context/authContext";
 import WaitingPage from "./WaitingPage";
+import { OidcSecure } from '@axa-fr/react-oidc-context'
+import { IdentityAuthProvider } from "./auth/auth-provider-factory";
 
 type CustomRouteProps = {
   isPrivate?: boolean;
@@ -22,33 +24,30 @@ type CustomRouteProps = {
 export default function Routes() {
     const { isAuthenticated, isCheckingAuthentication } = useContext(AuthContext);
 
-    const CustomRoute = ({ isPrivate, ...rest }: CustomRouteProps) => {
-        if (isPrivate && !isAuthenticated) {
-            return <Redirect to="/google.com" />
-        } else {
-        return <Route {...rest} />;
-        }
-    };
-
-
     if (isCheckingAuthentication) {
         return (
             <WaitingPage />
         )
-    } else {
-        return (            
+    }
+    if (!isAuthenticated) {
+        return (
+            <IdentityAuthProvider>
+                <Route
+                    path="/sga-react/servidores/:codUnidade"
+                >
+                    <OidcSecure>
+                        <Servidores />
+                    </OidcSecure>
+                </Route>
+            </IdentityAuthProvider>
+        )
+    }
+    else {
+        return (
             <Switch>
-                <CustomRoute
-                    isPrivate
-                    exact
+                <Route
                     path="/sga-react/servidores/:codUnidade"
                     component={Servidores}
-                />
-
-                <CustomRoute
-                    exact
-                    path="/fasf"
-                    component={WaitingPage}
                 />
             </Switch>
         )
