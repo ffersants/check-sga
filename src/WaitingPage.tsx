@@ -1,3 +1,4 @@
+import React from 'react'
 import { Footer, Loader } from "rsuite";
 import mainTanceAnimation from './assets/maintance-animation.json'
 import "./LoginStyle.scss";
