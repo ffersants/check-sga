@@ -1,6 +1,7 @@
 import React, { useContext} from "react";
 import Servidores from "./Servidores";
 import {
+    BrowserRouter,
   Route,
   RouteComponentProps,
   Switch,
@@ -21,31 +22,29 @@ type CustomRouteProps = {
 };
 
 export default function Routes() {
-    const { isAuthenticated, isCheckingAuthentication } = useContext(AuthContext);
+    const { isAuthenticated, isCheckingAuthentication, activeAuthFlow} = useContext(AuthContext);
 
-    // if (isCheckingAuthentication) {
-    //     return (
-    //         <WaitingPage />
-    //     )
-    // }
-    console.log(isAuthenticated)
-    if (!isAuthenticated) {
-        console.log('foi no nao autenticado', isAuthenticated)
+   if (activeAuthFlow === "Authorization") {
+        console.log('2')
         return (
             <IdentityAuthProvider>
+                <BrowserRouter>
+                <Switch>
                 <Route
                     exact
                     path="/sga-react/servidores/:codUnidade"
-                >
+                    >
                     <OidcSecure>
                         <Servidores />
                     </OidcSecure>
                 </Route>
+                </Switch>
+                </BrowserRouter>
             </IdentityAuthProvider>
         )
     }
-    else {
-        console.log('veio no autenticado')
+    else if(activeAuthFlow === "Implicit") {
+        console.log('3')
         return (
             <Switch>
                 <Route
@@ -53,7 +52,17 @@ export default function Routes() {
                     path="/sga-react/servidores/:codUnidade"
                     component={Servidores}
                 />
+                <Route
+                    exact
+                    path="/redirect"
+                    component={WaitingPage}
+                />
             </Switch>
         )
+    }
+   else {
+       return (
+           <p>Loading...</p>
+       )
     }
 }

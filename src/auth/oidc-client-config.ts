@@ -7,8 +7,8 @@ export const oidcClientConfig: UserManagerSettings = {
   response_mode: 'query',
   post_logout_redirect_uri: '/',
   authority: 'https://accountshomol.pcdf.gov.br',
-  scope: 'email offline_access corporativo_api blocoassinaturas_api profile openid',
-  silent_redirect_uri: 'https://blocoassinaturashomol.pcdf.gov.br/authentication/callback',
+  scope: 'email offline_access sga_api corporativo_api blocoassinaturas_api profile openid',
+  silent_redirect_uri: 'http://localhost:3000/authentication/callback',
   automaticSilentRenew: true,
   loadUserInfo: true
 }

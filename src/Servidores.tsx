@@ -2,18 +2,21 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Table,  Container, Header, Content, Navbar, Icon, Breadcrumb, IconButton } from "rsuite";
 import { AuthContext } from "./context/authContext";
+import { UsuarioContext } from "./context/usuario-context";
 import { getServidores } from "./services/getServidores/getServidores";
 const { Column, HeaderCell, Cell } = Table;
 
 export default function Servidores() {
-    const { codUnidade } = useParams < { codUnidade: string }>()
-    const {bearer} = useContext(AuthContext)
-    const [servidores, setServidores] = useState()
-    const [isLoading, setIsLoading] = useState(true)
+  const { codUnidade } = useParams < { codUnidade: string }>()
+  const { bearer } =  useContext(AuthContext)
 
+  const [servidores, setServidores] = useState()
+  const [isLoading, setIsLoading] = useState(true)
 
+  const bearerToUse = bearer
+ console.log('bearer a usar', bearer) 
   useEffect(() => {
-    getServidores({codUnidade, bearer})
+    getServidores({codUnidade, bearer: bearerToUse})
       .then(i => {
         i.body.forEach((servidor: any) =>
           servidor.nome = servidor.nome
@@ -24,7 +27,7 @@ export default function Servidores() {
       })
       .catch(e => console.log('buscar de servidores falhou', e))
       .finally(() => setIsLoading(false)) 
-    }, [codUnidade, bearer])
+    }, [codUnidade])
 
     return (
       <Container >

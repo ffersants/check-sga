@@ -1,20 +1,22 @@
 import { createContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-import { login, validateToken } from "../services/userSession";
+import { validateToken } from "../services/userSession";
 import { AuthContextData } from "../types/authTypes";
 
 export const AuthContext = createContext({} as AuthContextData);
 
 export default function AuthProvider({ children }: any) {
   const history = useHistory()
-  const [isCheckingAuthentication, setIsCheckingAuthentication] = useState(true);
+  const [isCheckingAuthentication, setIsCheckingAuthentication] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [activeAuthFlow, setActiveAuthFlow] = useState<"Implicit" | "Authorization" | null>(null)
   const [bearer, setBearer] = useState('')
   
+  
   function userLoggedOnSGA() {
-        const isUserCredentialsOnUrl = history.location.search
-        return isUserCredentialsOnUrl 
+    const isUserCredentialsOnUrl = history.location.search.includes("---")
+        return Boolean(isUserCredentialsOnUrl) 
   }
 
   async function refreshLoginOnIdentity(credentialsEncoded: string, targetPage: string) {
@@ -29,6 +31,7 @@ export default function AuthProvider({ children }: any) {
           setBearer(result.body.access_token)
         }
       })
+      .catch(e => setActiveAuthFlow("Authorization"))
       .finally(() => {
         setIsCheckingAuthentication(false)
         history.push(targetPage)
@@ -38,13 +41,14 @@ export default function AuthProvider({ children }: any) {
   useEffect(() => {
     const targetPage = history.location.pathname
     if (userLoggedOnSGA()) {
+      setActiveAuthFlow("Implicit")
       const userCredentials = history.location.search
-      // history.push("/redirect")
+      history.push("/redirect")
       refreshLoginOnIdentity(userCredentials, targetPage)
     }
     else {
-      history.push(targetPage)
       setIsCheckingAuthentication(false)
+      setActiveAuthFlow("Authorization")
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -56,7 +60,9 @@ export default function AuthProvider({ children }: any) {
         isAuthenticated,
         isCheckingAuthentication,
         bearer,
-        setIsAuthenticated
+        setIsAuthenticated,
+        activeAuthFlow,
+        setBearer
       }}
     >
       {children}

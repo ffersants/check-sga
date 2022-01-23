@@ -1,4 +1,3 @@
-import { HttpResponse } from "../services/http/IHttpClient";
 
 export type SignInCredentials = {
   matricula: string;
@@ -7,8 +6,10 @@ export type SignInCredentials = {
 
 export type AuthContextData = {
   bearer: string;
+  setBearer: React.Dispatch<React.SetStateAction<string>>;
   isAuthenticated: boolean;
   isCheckingAuthentication: boolean;
   setIsCheckingAuthentication: React.Dispatch<React.SetStateAction<boolean>>;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  activeAuthFlow: "Implicit" | "Authorization" | null
 };

@@ -11,43 +11,49 @@ export const UsuarioContextProvider: React.FC = ({ children }) => {
 
   const { isEnabled, login, logout, oidcUser } = useReactOidc()
 
-  const {setIsCheckingAuthentication, setIsAuthenticated} = useContext(AuthContext)
+  const {setIsCheckingAuthentication, setIsAuthenticated, activeAuthFlow, setBearer} = useContext(AuthContext)
 
   // Axios global interceptor magic
-  Axios.interceptors.request.use(
-    (config) => {
-      if (oidcUser) {
-        config.headers = {
-          ...config.headers,
-          Authorization: `Bearer ${oidcUser.access_token}`
-        }
-      }
-      return config
-    },
-    (error) => console.log('error ', error)
-  )
+  // Axios.interceptors.request.use(
+  //   (config) => {
+  //     if (oidcUser) {
+  //       config.headers = {
+  //         ...config.headers,
+  //         Authorization: `Bearer ${oidcUser.access_token}`
+  //       }
+  //     }
+  //     return config
+  //   },
+  //   (error) => console.log('error ', error)
+  // )
 
   useEffect(() => {
-    if (!isEnabled || !oidcUser) {
-      setUsuario(undefined)
-      setAccessToken('')
-      return
-    }
+    if (activeAuthFlow === "Authorization") {
+      if (!isEnabled || !oidcUser) {
+        setUsuario(undefined)
+        setAccessToken('')
+        return
+      }
 
-    const { name, matricula8Digitos, codigoOrgaoExercicio, unidade, cargo } = oidcUser.profile
+      const { name, matricula8Digitos, codigoOrgaoExercicio, unidade, cargo } = oidcUser.profile
 
-    if (oidcUser.access_token) {
-      setAccessToken(oidcUser.access_token)
-    }
-    if (name && matricula8Digitos && codigoOrgaoExercicio && unidade) {
+      if (oidcUser.access_token) {
+        setAccessToken(oidcUser.access_token)
+        console.log('bearer recebido pelo identity', oidcUser.access_token)
+        setBearer(oidcUser.access_token)
+        setIsAuthenticated(true)
+        setIsCheckingAuthentication(false)
+      }
+      if (name && matricula8Digitos && codigoOrgaoExercicio && unidade) {
 
-      setUsuario({
-        matricula: matricula8Digitos,
-        nome: name,
-        orgaoExercicio: codigoOrgaoExercicio,
-        unidade: unidade,
-        nomeCargoEfetivo: cargo
-      })
+        setUsuario({
+          matricula: matricula8Digitos,
+          nome: name,
+          orgaoExercicio: codigoOrgaoExercicio,
+          unidade: unidade,
+          nomeCargoEfetivo: cargo
+        })
+      }
     }
   }, [isEnabled, oidcUser])
 
