@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Table,  Container, Header, Content, Navbar, Icon, Breadcrumb, IconButton } from "rsuite";
 import { AuthContext } from "./context/authContext";
-import { UsuarioContext } from "./context/usuario-context";
 import { getServidores } from "./services/getServidores/getServidores";
 const { Column, HeaderCell, Cell } = Table;
 

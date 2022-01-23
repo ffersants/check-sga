@@ -3,7 +3,6 @@ import Servidores from "./Servidores";
 import {
     BrowserRouter,
   Route,
-  RouteComponentProps,
   Switch,
 } from "react-router-dom";
 import { AuthContext } from "./context/authContext";
@@ -11,18 +10,8 @@ import WaitingPage from "./WaitingPage";
 import { OidcSecure } from '@axa-fr/react-oidc-context'
 import { IdentityAuthProvider } from "./auth/auth-provider-factory";
 
-type CustomRouteProps = {
-  isPrivate?: boolean;
-  component:
-    | React.ComponentType<RouteComponentProps<any>>
-    | React.ComponentType<any>
-    | undefined;
-  path: string;
-  exact?: boolean;
-};
-
 export default function Routes() {
-    const { isAuthenticated, isCheckingAuthentication, activeAuthFlow} = useContext(AuthContext);
+    const { activeAuthFlow} = useContext(AuthContext);
 
    if (activeAuthFlow === "Authorization") {
         console.log('2')

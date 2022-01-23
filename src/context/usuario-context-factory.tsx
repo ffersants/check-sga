@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Usuario } from '../types/usuario'
 import { useReactOidc } from '@axa-fr/react-oidc-context'
-import Axios from 'axios'
 import { UsuarioContext } from './usuario-context'
 import { AuthContext } from './authContext'
 

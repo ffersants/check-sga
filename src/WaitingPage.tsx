@@ -1,20 +1,20 @@
 import React from 'react'
 import { Footer, Loader } from "rsuite";
-import mainTanceAnimation from './assets/maintance-animation.json'
-import "./LoginStyle.scss";
+// import mainTanceAnimation from './assets/maintance-animation.json'
+import "./WaitingPage.css";
 import img from './assets/brasao-original.png'
 
 export default function WaitingPage() {
 
-    const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData: mainTanceAnimation,
-        rendererSettings: {
-            preserveAspectRatio: "xMidYMid slice",
-            progressiveLoad: true
-        }
-    };
+    // const defaultOptions = {
+    //     loop: true,
+    //     autoplay: true,
+    //     animationData: mainTanceAnimation,
+    //     rendererSettings: {
+    //         preserveAspectRatio: "xMidYMid slice",
+    //         progressiveLoad: true
+    //     }
+    // };
 
     return (
       <div className="container-background">

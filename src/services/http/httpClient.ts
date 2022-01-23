@@ -1,5 +1,3 @@
-import { AuthContext } from './../../context/authContext';
-import { useContext } from 'react';
 import axios, { AxiosResponse } from "axios";
 import qs from "qs";
 import { HttpRequest, HttpResponse, IHttpClient } from "./IHttpClient";
