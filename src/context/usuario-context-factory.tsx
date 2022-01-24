@@ -5,12 +5,11 @@ import { UsuarioContext } from './usuario-context'
 import { AuthContext } from './authContext'
 
 export const UsuarioContextProvider: React.FC = ({ children }) => {
-  const [usuario, setUsuario] = useState<Usuario>()
   const [accessToken, setAccessToken] = useState('')
 
   const { isEnabled, login, logout, oidcUser } = useReactOidc()
 
-  const {setIsCheckingAuthentication, setIsAuthenticated, activeAuthFlow, setBearer} = useContext(AuthContext)
+  const {setIsCheckingAuthentication, setIsAuthenticated, activeAuthFlow, setBearer, usuario, setUsuario} = useContext(AuthContext)
 
   // Axios global interceptor magic
   // Axios.interceptors.request.use(

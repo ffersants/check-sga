@@ -14,26 +14,24 @@ export default function Routes() {
     const { activeAuthFlow} = useContext(AuthContext);
 
    if (activeAuthFlow === "Authorization") {
-        console.log('2')
         return (
             <IdentityAuthProvider>
                 <BrowserRouter>
-                <Switch>
-                <Route
-                    exact
-                    path="/sga-react/servidores/:codUnidade"
-                    >
-                    <OidcSecure>
-                        <Servidores />
-                    </OidcSecure>
-                </Route>
-                </Switch>
+                    <Switch>
+                        <Route
+                            exact
+                            path="/sga-react/servidores/:codUnidade"
+                            >
+                            <OidcSecure>
+                                <Servidores />
+                            </OidcSecure>
+                        </Route>
+                    </Switch>
                 </BrowserRouter>
             </IdentityAuthProvider>
         )
     }
     else if(activeAuthFlow === "Implicit") {
-        console.log('3')
         return (
             <Switch>
                 <Route

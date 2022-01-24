@@ -1,3 +1,4 @@
+import { Usuario } from "./usuario";
 
 export type SignInCredentials = {
   matricula: string;
@@ -12,4 +13,6 @@ export type AuthContextData = {
   setIsCheckingAuthentication: React.Dispatch<React.SetStateAction<boolean>>;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   activeAuthFlow: "Implicit" | "Authorization" | null
+  setUsuario: React.Dispatch<React.SetStateAction<Usuario | undefined>>
+  usuario: Usuario | undefined
 };

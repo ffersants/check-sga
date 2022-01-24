@@ -7,7 +7,7 @@ const { Column, HeaderCell, Cell } = Table;
 
 export default function Servidores() {
   const { codUnidade } = useParams < { codUnidade: string }>()
-  const { bearer } =  useContext(AuthContext)
+  const { bearer, usuario } =  useContext(AuthContext)
 
   const [servidores, setServidores] = useState()
   const [isLoading, setIsLoading] = useState(true)
@@ -72,8 +72,8 @@ export default function Servidores() {
             }}
           >
             <div>
-              <p>Fernando Santos Ferreira</p>
-              <p>0022985</p>
+              <p>{ usuario?.nome}</p>
+              <p>{ usuario?.matricula}</p>
             </div>
             <Icon
               icon="sign-out"
